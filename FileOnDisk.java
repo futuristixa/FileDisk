@@ -31,16 +31,16 @@ DecimalFormat df = new DecimalFormat("#00.00");
 	
 	public String getSize1() { //method returns the size of the file object with the correct file type.
 		if (size < 1024 ) { //print bytes
-			return (String.valueOf(df.format(size))+" B");
+			return (String.valueOf(df.format(size))+" B\t"+absPath);
 		}
 		else if (size/1024 < 1024 ){//print kilobytes
-			return (String.valueOf(df.format(size/1024.0))+" KB");
+			return (String.valueOf(df.format(size/1024.0))+" KB\t"+absPath);
 		}
 		else if (size/1024/1024 < 1024 ){//print megabytes
-			return (String.valueOf(df.format(size/(1024.0*1024)))+" MB");
+			return (String.valueOf(df.format(size/(1024.0*1024)))+" MB\t"+absPath);
 		}
 		else //print gigabytes
-			return (String.valueOf(df.format(size/(1024.0 * 1024*1024)))+ " GB");
+			return (String.valueOf(df.format(size/(1024.0 * 1024*1024)))+ " GB\t"+absPath);
 		
 	}
 	
@@ -53,13 +53,13 @@ DecimalFormat df = new DecimalFormat("#00.00");
 	@Override
 	public int compareTo(FileOnDisk other){
 		if(this.size < other.getSize()){
-			return 1;
+			return -1;
 		}
 		else if(this.size == other.getSize()){
 			return 0;
 		}
 		else{
-			return -1;
+			return 1;
 		}
 	}
 }

@@ -91,7 +91,7 @@ public class DirectorySize {
 		
 		for (int i = 0; i < numOfFiles; i++)
 			//print from the back so that the largest files are printed
-			System.out.println(listOfFiles.get(i).getSize1()+"\t"+listOfFiles.get(i).getAbsPath());
+			System.out.println(listOfFiles.get(listOfFiles.size() - i - 1).getSize1());
 	}
 
 	/**
