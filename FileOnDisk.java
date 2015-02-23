@@ -10,6 +10,8 @@ import java.text.DecimalFormat;
  *@params size - size of a given file
  *
  */
+
+//TODO: override the toString Method
 public class FileOnDisk implements Comparable<FileOnDisk>{
 /**
  * This class contains the File constructor and getter functions.
@@ -20,31 +22,22 @@ public class FileOnDisk implements Comparable<FileOnDisk>{
  */
 String absPath;
 long size;
-DecimalFormat df = new DecimalFormat("#00.00");
+DecimalFormat df = new DecimalFormat("#00.00"); //to return the formatted size within two decimal points
+	/**
+	 * Constructor for the FileOnDisk object.
+	 * @param absPath represents the absolute path of the fileOnDisk object.
+	 * @param size represents the size of the fileOnDisk object in bytes.
+	 */
 	public FileOnDisk(String absPath, long size){ //this is the constructor for the File object
 		this.absPath = absPath;
 		this.size=size;
 	}
-	public long getSize() { //this method returns the size of the file object in bytes.
+	
+	//getters
+	public long getSize() {
 		return this.size;
-	}
-	
-	public String getSize1() { //method returns the size of the file object with the correct file type.
-		if (size < 1024 ) { //print bytes
-			return (String.valueOf(df.format(size))+" B\t"+absPath);
-		}
-		else if (size/1024 < 1024 ){//print kilobytes
-			return (String.valueOf(df.format(size/1024.0))+" KB\t"+absPath);
-		}
-		else if (size/1024/1024 < 1024 ){//print megabytes
-			return (String.valueOf(df.format(size/(1024.0*1024)))+" MB\t"+absPath);
-		}
-		else //print gigabytes
-			return (String.valueOf(df.format(size/(1024.0 * 1024*1024)))+ " GB\t"+absPath);
-		
-	}
-	
-	public String getAbsPath() { //this method returns the absolute path of the file object
+	}	
+	public String getAbsPath() {
 		return this.absPath;
 	}
 	/**
@@ -61,5 +54,23 @@ DecimalFormat df = new DecimalFormat("#00.00");
 		else{
 			return 1;
 		}
+	}
+	/**
+	 * This override is to return the FileOnDisk object's 
+	 * properly formatted size and absolute path when called with the get() method in DirectorySize main.
+	 */
+	@Override
+	public String toString(){
+		if (size < 1024 ) { //print bytes
+			return (String.valueOf(df.format(size))+" B\t"+absPath);
+		}
+		else if (size/1024 < 1024 ){//print kilobytes
+			return (String.valueOf(df.format(size/1024.0))+" KB\t"+absPath);
+		}
+		else if (size/1024/1024 < 1024 ){//print megabytes
+			return (String.valueOf(df.format(size/(1024.0*1024)))+" MB\t"+absPath);
+		}
+		else //print gigabytes
+			return (String.valueOf(df.format(size/(1024.0 * 1024*1024)))+ " GB\t"+absPath);
 	}
 }

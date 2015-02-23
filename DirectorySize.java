@@ -25,28 +25,30 @@ public class DirectorySize {
 	 * circular links and infinite recursion) */
 	static List <String> listOfVisitedDirs;
 	
+	//a variable to store the size of the directory and its constituent files.
 	static long totalSize = 0;
 	
 	/** 
 	 * This method expects one or two arguments. 
 	 * @param args Array of arguments passed to the program. The first one 
-	 * is the name of the directory to be explored. The second (optional) is the
+	 * is the name of the directory to be explored. The second is the
 	 * max number of largest files to be printed to the screen.
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException{
-		
-		//TODO:
 		//check the number of command line arguments
 		//terminate if not sufficient
+		if (args.length < 2){
+			System.err.println("Not enough command line arguments. \nPlease include a path and the number of largest files you wish to see.");
+			System.exit(0);
+		}
 		
-		//TODO:
 		// use directory name entered from the command line
 		// verify if the directory is valid, terminate if not
 		String directory = args[0];
 		File dir = new File(directory);
 		
-		// verification goes here CHECK
+		// verification goes here
 		if (!dir.exists()){
 			System.err.println("No such input file");
 			System.exit(1);
@@ -74,7 +76,7 @@ public class DirectorySize {
 		
 		
 		// Display the largest files in the directory
-		int numOfFiles = 20; //default value
+		int numOfFiles = Integer.valueOf(args[1]); //default value
 		try {
 			if (args.length == 2 )  {
 				numOfFiles = Integer.parseInt(args[1]);
@@ -91,7 +93,7 @@ public class DirectorySize {
 		
 		for (int i = 0; i < numOfFiles; i++)
 			//print from the back so that the largest files are printed
-			System.out.println(listOfFiles.get(listOfFiles.size() - i - 1).getSize1());
+			System.out.println(listOfFiles.get(listOfFiles.size() - i - 1));
 	}
 
 	/**
