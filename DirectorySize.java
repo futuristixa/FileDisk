@@ -33,7 +33,7 @@ public class DirectorySize {
 	 * @param args Array of arguments passed to the program. The first one 
 	 * is the name of the directory to be explored. The second is the
 	 * max number of largest files to be printed to the screen.
-	 * @throws IOException
+	 * @throws IOException for files that can't put in toString()
 	 */
 	public static void main(String[] args) throws IOException{
 		//check the number of command line arguments
@@ -76,7 +76,7 @@ public class DirectorySize {
 		
 		
 		// Display the largest files in the directory
-		int numOfFiles = Integer.valueOf(args[1]); //default value
+		int numOfFiles = Integer.valueOf(args[1]);
 		try {
 			if (args.length == 2 )  {
 				numOfFiles = Integer.parseInt(args[1]);
@@ -91,7 +91,7 @@ public class DirectorySize {
 		
 		Collections.sort(listOfFiles);
 		
-		for (int i = 0; i < numOfFiles; i++)
+		for (int i = 0; i < numOfFiles && i < numOfFiles; i++)
 			//print from the back so that the largest files are printed
 			System.out.println(listOfFiles.get(listOfFiles.size() - i - 1));
 	}
@@ -108,24 +108,30 @@ public class DirectorySize {
 	 * @throws IOException 
 	 */
 	public static long getSize (File file) throws IOException   {
-		if (file.isDirectory()){ 	//if potentialDirName is a directory
-			if (!listOfVisitedDirs.contains(file.getAbsolutePath())){ 	//make sure the directory has not been searched already
-				long sizeTemp =file.length(); 	//get the size of the file
-				totalSize += sizeTemp; 	//add fileÕs size to totalSize CHECK
-				File[] listOfFiles = file.listFiles(); 	//get the list of all the files and sub-directories in potentialDirName CHECK
-				for (File subfile : listOfFiles) {	 //for each of the files and sub-directories
-					getSize(subfile); 	//recursive call for all files in the directory
+		try{
+			if (file.isDirectory()){ 	//if potentialDirName is a directory
+				if (!listOfVisitedDirs.contains(file.getAbsolutePath())){ 	//make sure the directory has not been searched already
+					long sizeTemp =file.length(); 	//get the size of the file
+					totalSize += sizeTemp; 	//add fileÕs size to totalSize CHECK
+					File[] listOfFiles = file.listFiles(); 	//get the list of all the files and sub-directories in potentialDirName CHECK
+					for (File subfile : listOfFiles) {	 //for each of the files and sub-directories
+						getSize(subfile); 	//recursive call for all files in the directory
+					}
+					listOfVisitedDirs.add(file.getAbsolutePath()); //adds directory to list of visited directories
 				}
-				listOfVisitedDirs.add(file.getAbsolutePath()); //adds directory to list of visited directories
 			}
+			if (file.isFile() || !listOfFiles.contains(file)){ //for files that haven't been accounted for
+				long sizeTemp1 =file.length(); 	//get the size of the file
+				totalSize += sizeTemp1;	//add fileÕs size to totalSize CHECK
+				String absPath = file.getCanonicalPath();	//get absPath canonical path...
+				listOfFiles.add(new FileOnDisk(absPath,sizeTemp1)); //add file (its name and size) to the list of files
+			}
+			return totalSize;
 		}
-		if (file.isFile() || !listOfFiles.contains(file)){ //for files that haven't been accounted for
-			long sizeTemp1 =file.length(); 	//get the size of the file
-			totalSize += sizeTemp1;	//add fileÕs size to totalSize CHECK
-			String absPath = file.getAbsolutePath();	//get absPath
-			listOfFiles.add(new FileOnDisk(absPath,sizeTemp1)); //add file (its name and size) to the list of files
+		//IOexception catcher
+		catch(IOException ex){
+			System.err.println("Caught IOException"+ex.getMessage());
+			return totalSize;
 		}
-		return totalSize;
 	}
-	
 }
